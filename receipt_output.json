@@ -1,0 +1,87 @@
+{
+  "merchant": "TRADER JOE'S",
+  "date": "06-28-2014",
+  "items": [
+    {
+      "Description": "R-CARROTS SHREDDED 10 OZ",
+      "TotalPrice": "1.29"
+    },
+    {
+      "Description": "R-CUCUMBERS PERSIAN 1 LB",
+      "TotalPrice": "1.99"
+    },
+    {
+      "Description": "TOMATOES CRUSHED NO SALT",
+      "TotalPrice": "1.59"
+    },
+    {
+      "Description": "TOMATOES WHOLE NO SALT W/BASIL",
+      "TotalPrice": "1.59"
+    },
+    {
+      "Description": "ORGANIC OLD FASHIONED OATMEAL",
+      "TotalPrice": "2.69"
+    },
+    {
+      "Description": "MINI-PEARL TOMATOES ..",
+      "TotalPrice": "2.49"
+    },
+    {
+      "Description": "PKG SHREDDED MOZZARELLA LITE T",
+      "TotalPrice": "3.99"
+    },
+    {
+      "Description": "EGGS 1 DOZ ORGANIC BROWN.",
+      "TotalPrice": "3.79"
+    },
+    {
+      "Description": "BEANS GARBANZO",
+      "TotalPrice": "0.89"
+    },
+    {
+      "Description": "SPROUTED CA STYLE",
+      "TotalPrice": "2.99"
+    },
+    {
+      "Description": "A-AVOCADOS HASS BAG 4CT",
+      "TotalPrice": "3.99"
+    },
+    {
+      "Description": "A-APPLE BAG JAZZ 2 LB",
+      "TotalPrice": "2.99"
+    },
+    {
+      "Description": "A-PEPPER BELL EACH XL RED",
+      "TotalPrice": "0.99"
+    },
+    {
+      "Description": "GROCERY NON TAXABLE",
+      "Price": "0.49",
+      "Quantity": "2",
+      "TotalPrice": "0.98"
+    },
+    {
+      "Description": "BANANAS ORGANIC",
+      "Price": "0.29/EA",
+      "Quantity": "3EA",
+      "TotalPrice": "0.87"
+    },
+    {
+      "Description": "CREAMY SALTED PEANUT BUTTER",
+      "TotalPrice": "2.49"
+    },
+    {
+      "Description": "WHL WHT PITA BREAD",
+      "TotalPrice": "1.69"
+    },
+    {
+      "Description": "GROCERY NON TAXABLE",
+      "Price": "0.69",
+      "Quantity": "2",
+      "TotalPrice": "1.38"
+    }
+  ],
+  "subtotal": "$38.68",
+  "tax": null,
+  "total": "$38.68"
+}
