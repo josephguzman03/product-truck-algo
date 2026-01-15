@@ -2,7 +2,7 @@
 
 ## Why OLTP (not OLAP)?
 
-Your system is primarily **transactional**:
+The system is primarily **transactional**:
 - **Real-time inserts**: Scan a receipt, save it immediately
 - **Corrections needed**: "Oops, that price was wrong, fix it"
 - **Ad-hoc queries**: "What did I buy last week?"
@@ -117,7 +117,6 @@ This query is fast because:
 | **Insert speed** | Fast (simple) | Moderate (dimension lookups) |
 | **Query complexity** | Join on-the-fly | Pre-aggregated tables |
 | **Best for** | OLTP + light analytics | Heavy analytics |
-| **Your use case** | ✅ Perfect fit | ❌ Overkill |
 
 ## Indexes
 
@@ -148,84 +147,11 @@ SELECT * FROM vw_monthly_merchant_spending
 WHERE merchant_name = 'WALMART' ORDER BY month DESC;
 ```
 
-These views let you run analytics without worrying about the underlying schema.
-
-## How to Use
-
-### 1. Create the schema
-```bash
-psql -U postgres -d receipt_inventory -f schema_oltp.sql
-```
-
-### 2. Insert a receipt (from parsed receipt data)
-```python
-import psycopg2
-
-receipt = {
-    'merchant': 'TRADER JOES',
-    'date': '2024-12-07',
-    'items': [
-        {'description': 'BANANAS', 'unit_price': 0.99, 'quantity': 1, 'total': 0.99},
-        {'description': 'MILK', 'unit_price': 3.49, 'quantity': 1, 'total': 3.49},
-    ],
-    'subtotal': 4.48,
-    'tax': 0.35,
-    'total': 4.83
-}
-
-conn = psycopg2.connect("dbname=receipt_inventory user=postgres")
-cur = conn.cursor()
-
-# Get or create merchant
-cur.execute("INSERT INTO merchant (merchant_name) VALUES (%s) ON CONFLICT DO NOTHING", 
-            (receipt['merchant'],))
-cur.execute("SELECT merchant_id FROM merchant WHERE merchant_name = %s",
-            (receipt['merchant'],))
-merchant_id = cur.fetchone()[0]
-
-# Insert receipt
-cur.execute("""
-    INSERT INTO receipt (merchant_id, transaction_date, subtotal, tax, total)
-    VALUES (%s, %s, %s, %s, %s) RETURNING receipt_id
-""", (merchant_id, receipt['date'], receipt['subtotal'], receipt['tax'], receipt['total']))
-receipt_id = cur.fetchone()[0]
-
-# Insert items
-for item in receipt['items']:
-    cur.execute("INSERT INTO product (product_description) VALUES (%s) ON CONFLICT DO NOTHING",
-                (item['description'],))
-    cur.execute("SELECT product_id FROM product WHERE product_description = %s",
-                (item['description'],))
-    product_id = cur.fetchone()[0]
-    
-    cur.execute("""
-        INSERT INTO receipt_item (receipt_id, product_id, quantity, unit_price, total_price)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (receipt_id, product_id, item['quantity'], item['unit_price'], item['total']))
-
-conn.commit()
-conn.close()
-```
-
-### 3. Run analytics
-```sql
--- Most purchased items
-SELECT * FROM vw_product_frequency ORDER BY num_purchases DESC LIMIT 10;
-
--- Monthly spending trends
-SELECT * FROM vw_monthly_merchant_spending ORDER BY month DESC;
-
--- Daily spending
-SELECT * FROM vw_daily_spending ORDER BY transaction_date DESC;
-```
-
 ## Summary
 
 This OLTP design is:
-- ✅ Fast for inserts/updates
-- ✅ Safe (no anomalies)
-- ✅ Easy to maintain
-- ✅ Simple analytical queries still work
-- ✅ Right-sized for your actual use case
-
-Start here, and if analytics become a bottleneck later, you can always create a separate OLAP database that syncs from this one.
+- Fast for inserts/updates
+- Safe (no anomalies)
+- Easy to maintain
+- Simple analytical queries still work
+- Right-sized for your actual use case
